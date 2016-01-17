@@ -5,6 +5,10 @@ $(document).ready(function() {
 
 function init(){
     console.log("init");
+            $('#inicio_div').show();
+        $("#crear_encuesta_div").hide();
+        $("#ver_encuesta_div").hide();
+        $("#ver_resultados_div").hide();
 
     $("#inicio").click(function(){
         console.log("inicio click");

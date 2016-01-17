@@ -1,45 +1,39 @@
 <?php
-require_once 'conexion/connectbd.php';
 
-// connecting to db
-$db = new DB_CONNECT();
+require("conexion/config.php");
+require("conexion/db_cloud.php");
 
-$nombre_usuario = $_POST['nombre_usuario'];
-$nombre = $_POST['nombre'];
-$email = $_POST['email'];
-$clave = $_POST['clave'];
+$nombre_usuario = $_GET['nombre_usuario'];
+$nombre = $_GET['nombre'];
+$email = $_GET['email'];
+$password = $_GET['password'];
 
-//$nombre_usuario ="jp";
-//$nombre ="jp";
-//$email ="jp";
-//$clave = "jp";
+// $nombre_usuario = "jp2";
+// $nombre = "jp2";
+// $email = "jp2";
+// $clave = "jp2";
 
-registro_usuario($nombre_usuario, $nombre, $email, $clave);
-function registro_usuario($nombre_usuario, $nombre, $email, $clave){
-    
-    $response = array();
 
-    $query = "INSERT INTO empresa (nombre_usuario, nombre, email, clave, fecha_registro)	
-VALUES('$nombre_usuario', '$nombre', '$email', '$clave', NOW())";
 
-    $result = mysql_query($query) or die(mysql_error());
+$strQuery="INSERT INTO empresa (nombre_usuario, nombre, email, clave, fecha_registro) VALUES('$nombre_usuario', '$nombre', '$email', '$clave', NOW())";
 
-//    echo "result: ".$result;
-    // check for empty result
-    if ($result > 0) {
-        // looping through all results
-        // products node
-        $response["success"] = "1";
+$query = $dbh->prepare($strQuery);
+$query->execute();
+  
+      while($data = $query->fetch()){
+        // var_dump($data);
+        //   $rows[] = array(
+        //             "id_empresa" => (isset($data['id_empresa']) ? $data['id_empresa'] : "0")
+        //   );
+      }
 
-        // success
-        //$response["success"] = 1;
-        // echoing JSON response
-        echo json_encode($response);
-    } else {
-        // no products found
-        //$response["success"] = 0;
-        $response["success"] = "0";
-        // echo no users JSON
-        echo json_encode($response);
+    if (isset($rows)) {        
+        $json = "{\"status\":\"OK\"}";
     }
-}
+    else {
+        $json = "{\"status\":\"OK\"}";
+    }
+
+$callback = $_GET['callback'];
+echo $callback.'('. $json . ')'; 
+

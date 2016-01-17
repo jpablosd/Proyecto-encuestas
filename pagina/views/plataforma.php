@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<?
+session_start();
+//echo $_SESSION["nombre_usuario"];
+  if(!isset($_SESSION["nombre_usuario"])){
+      //se redirecciona a la pagina principal
+      header("location: ../index.php");
+    }
+?>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,34 +26,43 @@
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <!-- CSS-->
-        <link href="css/prism.css" rel="stylesheet">
-        <link href="css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="../css/prism.css" rel="stylesheet">
+        <link href="../css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
 
-        <!--        <script type="text/javascript" src="scripts/controllers/login.js"></script>-->
 
         <!--  Scripts-->
-        <script src="js/jquery-2.1.1.min.js"></script>
-        <script src="js/jquery.timeago.min.js"></script>  
-        <script src="js/prism.js"></script>
-        <script src="bin/materialize.js"></script>
+        <script src="../js/jquery-2.1.1.min.js"></script>
+        <script src="../js/jquery.timeago.min.js"></script>  
+        <script src="../js/prism.js"></script>
+        <script src="../bin/materialize.js"></script>
 
         <script>
             $( document ).ready(function(){
                 $(".button-collapse").sideNav();
+
+//                 $("#inicio").click(function(){
+
+// document.getElementById("inicio_div").innerHTML='<object class="col s12 m12 l12" type="text/html" data="graficos.php" ></object>';
+
+//                     // $("#inicio_div").load("graficos.php #inicio_div");
+//                     // return false;
+//                 });
             });
+
+
         </script>
 
-        <!-- GRAFICOS GOOGLE -->
+                <!-- GRAFICOS GOOGLE -->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
         <!-- Base de controladores -->
-        <script type="text/javascript" src="controlers/base.js"></script>
+        
+        <script type="text/javascript" src="../controlers/base.js"></script>
 
     </head>
 
-
-
     <body>
+
         <header>
             <nav>
                 <div class="container">
@@ -56,7 +72,7 @@
 <li><a href="sass.html">Sass</a></li>
 <li><a href="badges.html">Components</a></li>
 -->
-                            <li><a href="collapsible.html">Cerrar Sesión</a></li>
+                            <li><a href="../php/cerrar.php">Cerrar Sesión</a></li>
                         </ul>
 
                         <div class="container"><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="mdi-navigation-menu"></i></a></div>
@@ -67,7 +83,7 @@
 
             <ul id="nav-mobile" class="side-nav fixed" style="width: 240px;">
                 <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo">
-                    <object id="front-page-logo" type="image/svg+xml" data="res/materialize.svg">Your browser does not support SVG</object></a></li>
+                    <object id="front-page-logo" type="image/svg+xml" data="../res/materialize.svg">Your browser does not support SVG</object></a></li>
                 <li class="bold"><a id="inicio" href="#" class="waves-effect waves-teal">Inicio</a></li>
                 <li class="bold"><a id="crear_encuestas" href="#" class="waves-effect waves-teal">Crear encuestas</a></li>
                 <li class="bold"><a id="ver_encuestas" href="#" class="waves-effect waves-teal">Ver encuestas</a></li>
@@ -77,8 +93,9 @@
 
         <main>
             <div class="row">
-                <div id="inicio_div">
-                    <div class="col s12 m12 l12">
+                
+              <div id="inicio_div" >
+                   <div class="col s12 m12 l12">
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title grey-text text-darken-4">Inicio</span>
@@ -120,8 +137,8 @@
                                     <div class="col s12 m12 l12">
                                         <script>
                                             google.load("visualization", "1.1", {packages:["bar"]});
-                                            google.setOnLoadCallback(drawChart);
-                                            function drawChart() {
+                                            google.setOnLoadCallback(drawChart2);
+                                            function drawChart2() {
                                                 var data = google.visualization.arrayToDataTable([
                                                     ['Year', 'Sales', 'Expenses', 'Profit'],
                                                     ['2014', 1000, 400, 200],
@@ -230,17 +247,17 @@
                                     <div class="col s12 m12 l12">
                                         <script>
                                             google.load('visualization', '1.1', {packages: ['line']});
-                                            google.setOnLoadCallback(drawChart);
+                                            google.setOnLoadCallback(drawChart3);
 
-                                            function drawChart() {
+                                            function drawChart3() {
 
-                                                var data = new google.visualization.DataTable();
+                                                var data2 = new google.visualization.DataTable();
                                                 data.addColumn('number', 'Day');
                                                 data.addColumn('number', 'Guardians of the Galaxy');
                                                 data.addColumn('number', 'The Avengers');
                                                 data.addColumn('number', 'Transformers: Age of Extinction');
 
-                                                data.addRows([
+                                                data2.addRows([
                                                     [1,  37.8, 80.8, 41.8],
                                                     [2,  30.9, 69.5, 32.4],
                                                     [3,  25.4,   57, 25.7],
@@ -268,7 +285,7 @@
 
                                                 var chart = new google.charts.Line(document.getElementById('curve_chart'));
 
-                                                chart.draw(data, options);
+                                                chart.draw(data2, options);
                                             }
                                         </script>
                                         <div id="curve_chart" style="width: 900px; height: 500px"></div>
@@ -320,7 +337,7 @@
                         </div>
                     </div>
 
-                </div>
+              </div>
 
                 <div id="crear_encuesta_div">
                     <div class="col s12 m12 l12">

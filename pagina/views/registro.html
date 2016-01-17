@@ -1,78 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Proyecto</title>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Proyecto</title>
 
-        <!--  Android 5 Chrome Color-->
-        <meta name="theme-color" content="#1976d2">
+	<!--  Android 5 Chrome Color-->
+	<meta name="theme-color" content="#1976d2">
 
-        <!-- CSS-->
-        <link href="css/prism.css" rel="stylesheet">
-        <link href="css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+	<!-- CSS-->
+	<link href="../css/prism.css" rel="stylesheet">
+	<link href="../css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
 
-        <!--        <script type="text/javascript" src="scripts/controllers/login.js"></script>-->
+	<!--        <script type="text/javascript" src="scripts/controllers/login.js"></script>-->
 
-        <!--  Scripts-->
-        <script src="js/jquery-2.1.1.min.js"></script>
-        <script src="js/jquery.timeago.min.js"></script>  
-        <script src="js/prism.js"></script>
-        <script src="bin/materialize.js"></script>
+	<!--  Scripts-->
+	<script src="../js/jquery-2.1.1.min.js"></script>
+	<script src="../js/jquery.timeago.min.js"></script>  
+	<script src="../js/prism.js"></script>
+	<script src="../bin/materialize.js"></script>
 
-        <!--
+		<!--
 <script src="js/init.js"></script>
 -->
-    </head>
+<script type="text/javascript">
 
-    <body>
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div id="registro" class="card">
-                    <div class="card-content">
-                        <div class="center-align">
-                            <a id="logo-container" href="#" class="brand-logo">
-                                <!--                                <object id="front-page-logo"  data="res/awarehome.png" style="height:110%; width: 40%; "></object>-->
-                            </a>
-                        </div>
-                        <div>
-                            <div class="row">
-                                <div class="input-field col s12 m12 l12 ">
-                                    <input id="nombre_usuario_registro" type="text" class="validate">
-                                    <label for="last_name">Nombre Usuario</label>
-                                </div>
-                                <div class="input-field col s12 m12 l12 ">
-                                    <input id="nombre" type="text" class="validate">
-                                    <label for="last_name">Nombre</label>
-                                </div>
+		//document.getElementById('registro_btn').style.display = 'none';
 
-                                <div class="input-field col s12">
-                                    <input id="email" type="email" class="validate">
-                                    <label for="email">Email</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12 m6 l6">
-                                    <input id="password1" type="password" class="validate">
-                                    <label for="password1">clave</label>
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    <input id="password2" type="password" class="validate" onchange="validarClave(this.value)">
-                                    <label for="password2">Repita clave</label>
-                                </div>
-                            </div>
-                            <div class="center-align">
-                                <div class="col s6 m6 l6" id="registro_btn">
-                                    <a class="waves-effect btn" onclick="registrar_usuario()">Registrarme</a>
-                                </div>
-                                <a class="amber waves-effect  btn" onclick="volver()">Volver</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+		function volver(){
+			window.location="login.html";
+		}
 
-    </body>
-</html>
+		var password;
+		function validarClave(pass2){
+			var clave1 =  document.getElementById('password1').value;
+			var clave2 =  document.getElementById('password2').value;
+			//console.log(pass2);
+			if (clave1 == clave2){
+				//se activa el boton registrar
+				document.getElementById('registro_btn').style.display = 'block';
+				password = clave1;
+			}
+			else{
+				//las claves son diferentes
+				Materialize.toast('Las claves son diferentes', 4000) // 4000 is the duration of the toast
+
+			}
+		}
+		function registrar_usuario(){
+
+			var nombre_usuario_registro = document.getElementById('nombre_usuario_registro').value;
+			var nombre = document.getElementById('nombre').value;
+			var email_usuario = document.getElementById('email').value;
+
+			if (nombre_usuario_registro == ""){
+				Materialize.toast('Nombre de usuario vacio', 4000) // 4000 is the duration of the toast
+			}
+			else if(nombre == ""){
+				Materialize.toast('Nombre', 4000) // 4000 is the duration of the toast
+			}else if(email_usuario = ""){
+				Materialize.toast('Email', 4000) // 4000 is the duration of the toast
+			}
+			else if(password == ""){
+				Materialize.toast('Password vacia', 4000) // 4000 is the duration of the toast
+			}
+			else{
+				//ajax al php de registro
+				var urlmod="../php/registro.php?nombre_usuario="+nombre_usuario_registro+"&password="+password;
+
+				$.ajax({url:urlmod,
+					data:'&callback=?',
+					type: "GET",
+					dataType: "jsonp",
+					//async: true,
+					success: function(data){
+						if (data.status =="OK") {
+							//$("body").load("body.php");
+							window.location="plataforma.php";
+						}
+						else{
+							//$("body").load("index.php");
+							alert("Error");
+							console.log(data.status);
+						}
+					}
+				}); 
+			}
+
+			console.log(nombre_usuario_registro);
+			console.log(nombre);
+			console.log(email_usuario);
+			console.log(password);
+		}
+		</script>
+
+	</head>
+
+	<body>
+		<div class="row">
+			<div class="col s12 m12 l12">
+				<div id="registro" class="card">
+					<div class="card-content">
+						<div class="center-align">
+							<a id="logo-container" href="#" class="brand-logo">
+								<!--                                <object id="front-page-logo"  data="res/awarehome.png" style="height:110%; width: 40%; "></object>-->
+							</a>
+						</div>
+						<div>
+							<div class="row">
+								<div class="input-field col s12 m12 l12 ">
+									<input id="nombre_usuario_registro" type="text" class="validate">
+									<label for="last_name">Nombre Usuario</label>
+								</div>
+								<div class="input-field col s12 m12 l12 ">
+									<input id="nombre" type="text" class="validate">
+									<label for="last_name">Nombre</label>
+								</div>
+
+								<div class="input-field col s12">
+									<input id="email" type="email" class="validate">
+									<label for="email">Email</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s12 m6 l6">
+									<input id="password1" type="password" class="validate">
+									<label for="password1">clave</label>
+								</div>
+								<div class="input-field col s12 m6 l6">
+									<input id="password2" type="password" class="validate" onchange="validarClave(this.value)">
+									<label for="password2">Repita clave</label>
+								</div>
+							</div>
+							<div class="center-align">
+								<div class="col s6 m6 l6" id="registro_btn" style="display: none">
+									<a class="waves-effect btn" onclick="registrar_usuario()">Registrarme</a>
+								</div>
+								<a class="amber waves-effect  btn" onclick="volver()">Volver</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	</html>
