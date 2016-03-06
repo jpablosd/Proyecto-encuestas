@@ -1,7 +1,9 @@
 <?php
 
-require("conexion/config.php");
-require("conexion/db_cloud.php");
+$response = array();
+require_once("conexion/config.php");
+// connecting to db
+$db = new DB_Connect();
 
 $nombre_usuario = $_GET['nombre_usuario'];
 $nombre = $_GET['nombre'];
@@ -13,27 +15,16 @@ $password = $_GET['password'];
 // $email = "jp2";
 // $clave = "jp2";
 
+$result = mysql_query("INSERT INTO empresa (nombre_usuario, nombre, email, clave, fecha_registro) VALUES('$nombre_usuario', '$nombre', '$email', '$password', NOW())") or die(mysql_error());
 
+$response = array();
 
-$strQuery="INSERT INTO empresa (nombre_usuario, nombre, email, clave, fecha_registro) VALUES('$nombre_usuario', '$nombre', '$email', '$clave', NOW())";
-
-$query = $dbh->prepare($strQuery);
-$query->execute();
-  
-      while($data = $query->fetch()){
-        // var_dump($data);
-        //   $rows[] = array(
-        //             "id_empresa" => (isset($data['id_empresa']) ? $data['id_empresa'] : "0")
-        //   );
-      }
-
-    if (isset($rows)) {        
-        $json = "{\"status\":\"OK\"}";
-    }
-    else {
-        $json = "{\"status\":\"OK\"}";
-    }
-
-$callback = $_GET['callback'];
-echo $callback.'('. $json . ')'; 
+if ($result > 0) {
+    $response["success"] = 1;
+    echo json_encode($response);
+}
+else{
+    $response["success"] = 0;
+    echo json_encode($response);
+}
 

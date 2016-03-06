@@ -52,21 +52,27 @@
 
 			var nombre_usuario_registro = document.getElementById('nombre_usuario_registro').value;
 			var nombre = document.getElementById('nombre').value;
-			var email_usuario = document.getElementById('email').value;
+			// var email_usuario = document.getElementById('email').value;
+			var correo = document.getElementById('correo').value;
+
 
 			if (nombre_usuario_registro == ""){
-				Materialize.toast('Nombre de usuario vacio', 4000) // 4000 is the duration of the toast
+				Materialize.toast('Nombre de usuario vacio', 4000); // 4000 is the duration of the toast
 			}
 			else if(nombre == ""){
-				Materialize.toast('Nombre', 4000) // 4000 is the duration of the toast
-			}else if(email_usuario = ""){
-				Materialize.toast('Email', 4000) // 4000 is the duration of the toast
+				Materialize.toast('Nombre', 4000); // 4000 is the duration of the toast
+			}else if(correo == ""){
+				Materialize.toast('Email', 4000); // 4000 is the duration of the toast
+			}else if(!validarEmail(correo)){
+		    	Materialize.toast('Email Incorrecto', 4000); 
 			}
 			else if(password == ""){
-				Materialize.toast('Password vacia', 4000) // 4000 is the duration of the toast
+				Materialize.toast('Password vacia', 4000); // 4000 is the duration of the toast
 			}
 			else{
+
 				//ajax al php de registro
+				/*
 				var urlmod="../php/registro.php?nombre_usuario="+nombre_usuario_registro+"&password="+password;
 
 				$.ajax({url:urlmod,
@@ -85,13 +91,51 @@
 							console.log(data.status);
 						}
 					}
-				}); 
-			}
+				});
+				*/
 
-			console.log(nombre_usuario_registro);
-			console.log(nombre);
-			console.log(email_usuario);
-			console.log(password);
+				var conexion;
+			    if (window.XMLHttpRequest){
+			        conexion = new XMLHttpRequest();
+			    }
+			    else{
+			        conexion = new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    conexion.onreadystatechange=function(){
+			        if (conexion.readyState==4 && conexion.status==200){
+			            //document.getElementById("midiv").innerHTML=conexion.responseText;
+			            myFunction(conexion.responseText); 
+			        }
+			    }
+			    conexion.open("GET","../php/registro.php?nombre_usuario="+nombre_usuario_registro+"&password="+password+"&nombre="+nombre+"&email="+correo,true);
+			    conexion.send();
+				function myFunction(response) {
+					var arr = JSON.parse(response);
+					if(arr.success>0){
+						Materialize.toast('Registro Exitoso', 4000); 
+						window.location = 'login.html'
+
+					}
+
+				}
+
+			// console.log(nombre_usuario_registro);
+			// console.log(nombre);
+			// console.log(correo);
+			// console.log(password);
+
+			}//else
+		}//registrar_usuario
+
+		function validarEmail( email ) {
+		    expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		    if ( !expr.test(email) ){
+		    	//alert("Error: La dirección de correo " + email + " es incorrecta.");
+		    	//Materialize.toast('Email Incorrecto', 4000); 
+				return false;
+			}else{
+				return true;
+			}
 		}
 		</script>
 
@@ -111,17 +155,23 @@
 							<div class="row">
 								<div class="input-field col s12 m12 l12 ">
 									<input id="nombre_usuario_registro" type="text" class="validate">
-									<label for="last_name">Nombre Usuario</label>
+									<label for="nombre_usuario_registro">Nombre Usuario</label>
 								</div>
 								<div class="input-field col s12 m12 l12 ">
 									<input id="nombre" type="text" class="validate">
-									<label for="last_name">Nombre</label>
+									<label for="nombre">Nombre</label>
+								</div>								
+<!-- 								<div class="input-field col s12">
+									<input id="email" type="text" class="validate">
+									<label for="email">Email</label>
+								</div> -->
+								<div class="input-field col s12 m12 l12 ">
+									<input id="correo" type="email" class="validate">
+									<label for="correo">Email</label>
 								</div>
 
-								<div class="input-field col s12">
-									<input id="email" type="email" class="validate">
-									<label for="email">Email</label>
-								</div>
+
+
 							</div>
 							<div class="row">
 								<div class="input-field col s12 m6 l6">

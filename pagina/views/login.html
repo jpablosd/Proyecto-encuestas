@@ -27,6 +27,7 @@
         var usuario = document.getElementById("nombre_usuario").value;
         var password = document.getElementById("password").value;
 
+        /*
         var urlmod="../php/login.php?nombre_usuario="+usuario+"&password="+password;
 
         $.ajax({url:urlmod,
@@ -44,7 +45,39 @@
                     alert("usuario incorrecto");
                 }
             }
-            }); 
+        });
+        */
+
+        var xmlhttp = new XMLHttpRequest();
+        var url = "../php/login.php?nombre_usuario="+usuario+"&password="+password;
+
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                myFunction(xmlhttp.responseText);
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+
+        function myFunction(response) {
+            var arr = JSON.parse(response);
+            var i;
+            var out = "";
+
+            console.log(arr.success);
+            if(arr.success == 1){
+                window.location="plataforma.php";
+            }
+            else{
+                alert("usuario incorrecto");
+            }
+            // for(i = 0; i < arr.length; i++) {
+            //     out += "<option value='"+arr[i].id  +"'"+">"+arr[i].nombre+"</option>";
+            //     //lista
+            // }
+        }
+
+
     }//login
 
     function registro_usuario(){

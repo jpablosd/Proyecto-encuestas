@@ -1,33 +1,44 @@
 <?php
+	session_start();
 
-require("conexion/config.php");
-require("conexion/db_cloud.php");
+$response = array();
+require_once("conexion/config.php");
+// connecting to db
+$db = new DB_Connect();
+
 
 $usuario = $_GET['nombre_usuario'];
 $password = $_GET['password'];
-
 // $usuario = "jp";
 // $password = "jp";
 
-$strQuery="SELECT * FROM empresa where nombre_usuario = '$usuario' AND clave ='$password'";
 
-$query = $dbh->prepare($strQuery);$query->execute();
-  
-      while($data = $query->fetch()){
-          $rows[] = array(
-                    "id_empresa" => (isset($data['id_empresa']) ? $data['id_empresa'] : "0")
-          );
-          session_start();
-          $_SESSION['nombre_usuario']=$data['nombre_usuario'];
-      }
+$result = mysql_query("SELECT * FROM empresa where nombre_usuario = '$usuario' AND clave ='$password'") or die(mysql_error());
 
-    if (isset($rows)) {        
-        $json = "{\"status\":\"OK\",\"result\":".json_encode($rows)."}";
+$response = array();
+if (mysql_num_rows($result) > 0) {
+    $_SESSION['nombre_usuario']=$usuario;
+
+    while ($row = mysql_fetch_array($result)) {
+        // temp user array
+        $usuario = array();
+        $usuario["id_empresa"] = $row["id_empresa"];
+        $_SESSION['id_empresa']=$row["id_empresa"];
+       // $cliente_cc["Geom"] = $row["Geom"];
+        // push single product into final response array
+        //array_push($response, $usuario);
     }
-    else {
-        $json = "{\"status\":\"ERROR\"}";
-    }
+    // success
+    //$response["success"] = 1;
+    // echoing JSON response
 
-$callback = $_GET['callback'];
-echo $callback.'('. $json . ')'; 
+
+
+	$response["success"] = 1;
+	echo json_encode($response);
+}
+else{
+	$response["success"] = 0;
+	echo json_encode($response);
+}
 
